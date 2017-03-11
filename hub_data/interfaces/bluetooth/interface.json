@@ -1,0 +1,44 @@
+{
+  "name": "bluetooth",
+  "functions": {
+    "connect": {
+      "args": {
+        "device_addr": {
+          "type": "string"
+        }
+      }
+    },
+    "send_string": {
+      "args": {
+        "device_addr": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "any"
+        }
+      }
+    }
+  },
+  "events": {
+    "send_string_response": {
+      "args": {
+        "requestId": {
+          "type": "any"
+        },
+        "body": {
+          "type": "object"
+        }
+      }
+    },
+    "connect_successful": {
+      "args": {
+        "body": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

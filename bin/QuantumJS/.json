@@ -1,0 +1,188 @@
+{
+  "nmaprun": {
+    "$": {
+      "scanner": "nmap",
+      "args": "nmap -oX - -sn 192.168.1.0/24",
+      "start": "1488993774",
+      "startstr": "Wed Mar 08 19:22:54 2017",
+      "version": "7.40",
+      "xmloutputversion": "1.04"
+    },
+    "verbose": [
+      {
+        "$": {
+          "level": "0"
+        }
+      }
+    ],
+    "debugging": [
+      {
+        "$": {
+          "level": "0"
+        }
+      }
+    ],
+    "host": [
+      {
+        "status": [
+          {
+            "$": {
+              "state": "up",
+              "reason": "arp-response",
+              "reason_ttl": "0"
+            }
+          }
+        ],
+        "address": [
+          {
+            "$": {
+              "addr": "192.168.1.1",
+              "addrtype": "ipv4"
+            }
+          },
+          {
+            "$": {
+              "addr": "F4:28:53:65:50:0C",
+              "addrtype": "mac",
+              "vendor": "Zioncom Electronics (Shenzhen)"
+            }
+          }
+        ],
+        "hostnames": [
+          "\r\n"
+        ],
+        "times": [
+          {
+            "$": {
+              "srtt": "2000",
+              "rttvar": "5000",
+              "to": "100000"
+            }
+          }
+        ]
+      },
+      {
+        "status": [
+          {
+            "$": {
+              "state": "up",
+              "reason": "arp-response",
+              "reason_ttl": "0"
+            }
+          }
+        ],
+        "address": [
+          {
+            "$": {
+              "addr": "192.168.1.13",
+              "addrtype": "ipv4"
+            }
+          },
+          {
+            "$": {
+              "addr": "34:51:C9:C1:D1:24",
+              "addrtype": "mac",
+              "vendor": "Apple"
+            }
+          }
+        ],
+        "hostnames": [
+          "\r\n"
+        ],
+        "times": [
+          {
+            "$": {
+              "srtt": "11375",
+              "rttvar": "10250",
+              "to": "100000"
+            }
+          }
+        ]
+      },
+      {
+        "status": [
+          {
+            "$": {
+              "state": "up",
+              "reason": "arp-response",
+              "reason_ttl": "0"
+            }
+          }
+        ],
+        "address": [
+          {
+            "$": {
+              "addr": "192.168.1.20",
+              "addrtype": "ipv4"
+            }
+          },
+          {
+            "$": {
+              "addr": "9C:B7:0D:42:E5:7C",
+              "addrtype": "mac",
+              "vendor": "Liteon Technology"
+            }
+          }
+        ],
+        "hostnames": [
+          "\r\n"
+        ],
+        "times": [
+          {
+            "$": {
+              "srtt": "10000",
+              "rttvar": "10000",
+              "to": "100000"
+            }
+          }
+        ]
+      },
+      {
+        "status": [
+          {
+            "$": {
+              "state": "up",
+              "reason": "localhost-response",
+              "reason_ttl": "0"
+            }
+          }
+        ],
+        "address": [
+          {
+            "$": {
+              "addr": "192.168.1.23",
+              "addrtype": "ipv4"
+            }
+          }
+        ],
+        "hostnames": [
+          "\r\n"
+        ]
+      }
+    ],
+    "runstats": [
+      {
+        "finished": [
+          {
+            "$": {
+              "time": "1488993776",
+              "timestr": "Wed Mar 08 19:22:56 2017",
+              "elapsed": "2.11",
+              "summary": "Nmap done at Wed Mar 08 19:22:56 2017; 256 IP addresses (4 hosts up) scanned in 2.11 seconds",
+              "exit": "success"
+            }
+          }
+        ],
+        "hosts": [
+          {
+            "$": {
+              "up": "4",
+              "down": "252",
+              "total": "256"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

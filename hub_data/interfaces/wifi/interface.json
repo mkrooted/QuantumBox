@@ -1,0 +1,53 @@
+{
+  "name": "wifi",
+  "functions": {
+    "GET_json": {
+      "args": {
+        "device_ip": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "any"
+        }
+      }
+    },
+    "GET_string": {
+      "args": {
+        "device_ip": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "requestId": {
+          "type": "any"
+        }
+      }
+    }
+  },
+  "events": {
+    "GET_json_response": {
+      "args": {
+        "requestId": {
+          "type": "any"
+        },
+        "body": {
+          "type": "object"
+        }
+      }
+    },
+    "GET_string_response": {
+      "args": {
+        "requestId": {
+          "type": "any"
+        },
+        "body": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

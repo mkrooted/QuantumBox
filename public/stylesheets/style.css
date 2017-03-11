@@ -1,0 +1,40 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+.cell {
+    vertical-align: middle;
+}
+
+.btn1 {
+    background: transparent;
+}
+
+.btn1:hover {
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.no-bottom-margin {
+    margin-bottom: 0;
+}
+
+.navbar-right-border, .navbar-nav {
+    border-right: solid gray 1px;
+}
+
+.credits {
+    text-align: justify;
+    width: 100%;
+    margin-right: 15px;
+}
+
+.no-devices {
+    padding: 10px;
+    text-align: center;
+}

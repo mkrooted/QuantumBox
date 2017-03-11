@@ -1,0 +1,50 @@
+{
+  "name": "led_library",
+  "version": "0.0.1",
+  "supported_devices": [
+    "aaaa-aaaa-aaaa-aaaa",
+    "bbbb-bbbb-bbbb-bbbb",
+    "cccc-cccc-cccc-cccc"
+  ],
+  "manufacturer": "DROP TABLE TEAMS",
+  "interface": "wifi",
+  "functions": {
+    "hello": {
+      "args": {}
+    },
+    "get_status": {
+      "args": {}
+    },
+    "light_on": {
+      "args": {}
+    },
+    "light_off": {
+      "args": {}
+    }
+  },
+  "events": {
+    "hello_response": {
+      "args": {
+        "body":{
+          "uid": "string",
+          "name": "string"
+        }
+      }
+    },
+    "get_status_response": {
+      "args": {
+        "state": "bool"
+      }
+    },
+    "light_on_response": {
+      "args": {
+        "body": "string"
+      }
+    },
+    "light_off_response": {
+      "args": {
+        "body": "string"
+      }
+    }
+  }
+}

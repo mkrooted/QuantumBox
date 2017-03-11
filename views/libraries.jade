@@ -1,0 +1,52 @@
+extends layout
+block content
+    <body>
+    <nav class="navbar navbar-default">
+    <div class="container">
+    <div class="navbar-header navbar-right-border">
+    <a href="/" class="navbar-brand">QuantumBox HUB</a>
+    </div>
+    <div>
+    <ul class="nav navbar-nav">
+    <li class="btn1"><a href="/">Home</a></li>
+    <li class="btn1"><a href="/lan-scan">Scan for new devices</a></li>
+    <li class="btn1"><a href="/manager">Entanglement manager</a></li>
+    <li class="btn1 active"><a href="/libs">Libraries manager</a></li>
+    <li class="btn1"><a href="/interfaces">Interfaces manager</a></li>
+    </ul>
+    </div>
+    </div>
+    </nav>
+    <div class="container">
+    <div class="jumbotron">
+    <h2>This is libraries manager</h2>
+    <p>Here you can see all installed libraries</p>
+    </div>
+    </div>
+    <div class="container">
+    <div class="panel panel-default">
+    <div class="table">
+    if libraries && libraries.length>0
+        table.table.table-striped
+            tr
+                td= 'Name'
+                td= 'Supported models'
+            each library in libraries
+                tr
+                    td= library.lib_name
+                    td
+                        if library.lib_uids && library.lib_uids.length>0
+                            each uid, i in library.lib_uids
+                                if i == 0
+                                    ='"'+uid+'"'
+                                else
+                                    =', "'+uid+'"'
+
+                        else
+                            ='No data'
+    else
+        div.no-devices
+            h3= 'No libraries'
+    </div>
+    </div>
+    </div>
