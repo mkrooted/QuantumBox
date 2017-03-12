@@ -4,7 +4,7 @@
 
 const express = require('express');
 const router = express.Router();
-const device_manager = require("../bin/device_manager");
+const device_manager = require("../bin/network_manager");
 const library_manager = require("../bin/library_manager");
 const interface_manager = require("../bin/interface_manager");
 const logger = require("../bin/logger");

@@ -5,12 +5,12 @@
 const logger = require('./logger');
 const xml2js = require('xml2js');
 const spawn = require('child_process').exec;
-const TAG = "DEVICE_MANAGER";
-
 const path = require("path");
+const TAG = "DEVICE_MANAGER";
+const lan_config = require("../configs/lan");
 
 function device_scanner(callback) {
-    spawn('nmap -oX - -sn 192.168.1.0/24', {"cwd": __dirname}, function (err, stdout, stderr) {
+    spawn('nmap -oX - -sn ' + lan_config.scan_query, {"cwd": __dirname}, function (err, stdout, stderr) {
         if (err) {
             logger.error(TAG, err);
             callback(err);

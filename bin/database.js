@@ -8,6 +8,25 @@ const cps = require("cps");
 const logger = require("./logger");
 const TAG = "DATABASE";
 
+// General Database
+function checkConnection(callback) {
+    db.getConnection(function (err, conn) {
+        if (err) {
+            callback(err);
+            // logger.error(TAG, err);
+            return
+        }
+        conn.query("SELECT last_insert_id()", function (err, data) {
+            if (err) {
+                callback(err);
+                logger.error(TAG, err);
+                return
+            }
+            callback(true);
+        })
+    });
+}
+
 // CommInterface model
 function truncateInterfaces(callback) {
     db.getConnection(function (err, conn) {
@@ -371,6 +390,7 @@ const Func = {
     truncate: truncateFunctions
 };
 
+module.exports.checkConnection = checkConnection;
 module.exports.models = {
     Library: Library,
     Device: Device,

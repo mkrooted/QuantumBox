@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('quantumbox:server');
 var http = require('http');
 var logger = require("./logger");
+var db = require("./database");
 var TAG = "WWW";
 /**
  * Get port from environment and store in Express.
@@ -89,4 +90,12 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
     logger.log(TAG, 'Listening on ' + bind);
+
+    db.checkConnection(function (dbStatus) {
+        if (dbStatus !== true) {
+            logger.warn(TAG, "Cannot connect to database - Hub is in limited functional mode")
+        } else {
+            logger.log(TAG, "Connected to database", dbStatus);
+        }
+    });
 }
