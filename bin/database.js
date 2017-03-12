@@ -3,9 +3,10 @@
  */
 const mysql = require("node-mysql");
 const DB = mysql.DB;
-var db = new DB(require('../configs/db'));
+const db = new DB(require('../configs/db'));
 const cps = require("cps");
 const logger = require("./logger");
+const async = require("async");
 const TAG = "DATABASE";
 
 // General Database
@@ -14,14 +15,17 @@ function checkConnection(callback) {
         if (err) {
             callback(err);
             // logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT last_insert_id()", function (err, data) {
             if (err) {
                 callback(err);
                 logger.error(TAG, err);
+                conn.release();
                 return
             }
+            conn.release();
             callback(true);
         })
     });
@@ -30,8 +34,9 @@ function checkConnection(callback) {
 // CommInterface model
 function truncateInterfaces(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("TRUNCATE TABLE interfaces", function (err, rows) {
@@ -42,11 +47,12 @@ function truncateInterfaces(callback) {
 }
 function getInterfaces(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
-        conn.query("SELECT * FROM interfaces",  function (err, rows) {
+        conn.query("SELECT * FROM interfaces", function (err, rows) {
             conn.release();
             callback(err, rows);
         });
@@ -54,8 +60,9 @@ function getInterfaces(callback) {
 }
 function addInterface(obj, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("INSERT INTO interfaces SET ?", obj, function (err) {
@@ -68,8 +75,9 @@ function addInterface(obj, callback) {
 }
 function getInterfaceById(interface_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM interfaces WHERE ?", {interface_id: interface_id}, function (err, rows, fields) {
@@ -80,8 +88,9 @@ function getInterfaceById(interface_id, callback) {
 }
 function getInterfaceByName(interface_name, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM interfaces WHERE ?", {interface_name: interface_name}, function (err, res) {
@@ -92,8 +101,9 @@ function getInterfaceByName(interface_name, callback) {
 }
 function deleteInterfaceById(interface_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("DELETE FROM interfaces WHERE ?", {interface_id: interface_id}, function (err, rows, fields) {
@@ -111,8 +121,9 @@ function deleteInterfaceById(interface_id, callback) {
 // Library model
 function truncateLibraries(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("TRUNCATE TABLE libraries", function (err, rows) {
@@ -123,11 +134,12 @@ function truncateLibraries(callback) {
 }
 function getLbraries(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
-        conn.query("SELECT * FROM libraries",  function (err, rows) {
+        conn.query("SELECT * FROM libraries", function (err, rows) {
             conn.release();
             callback(err, rows);
         });
@@ -135,8 +147,9 @@ function getLbraries(callback) {
 }
 function addLibrary(obj, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("INSERT INTO libraries SET ?", obj, function (err) {
@@ -149,8 +162,9 @@ function addLibrary(obj, callback) {
 }
 function getLibraryById(library_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM libraries WHERE ?", {lib_id: library_id}, function (err, rows, fields) {
@@ -161,8 +175,9 @@ function getLibraryById(library_id, callback) {
 }
 function getLibraryByName(library_name, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM libraries WHERE ?", {lib_name: library_name}, function (err, res) {
@@ -171,10 +186,40 @@ function getLibraryByName(library_name, callback) {
         });
     });
 }
+function getLibrariesBySingleUID(device_uid, callback) {
+    db.getConnection(function (err, conn) {
+        if (err) {
+            logger.error(TAG, err);
+            conn.release();
+            callback(err);
+            return
+        }
+        conn.query("SELECT * FROM libraries WHERE ?", {lib_is_active: 'Y'}, function (err, rows) {
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                callback(err);
+                return
+            }
+            let libraries = rows.filter(function (lib) {
+                let uids = JSON.parse(lib.lib_uids);
+                for (let uid of uids) {
+                    if (device_uid == uid) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            conn.release();
+            callback(null, libraries);
+        });
+    });
+}
 function deleteLibraryById(library_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("DELETE FROM libraries WHERE ?", {lib_id: library_id}, function (err, rows, fields) {
@@ -192,11 +237,12 @@ function deleteLibraryById(library_id, callback) {
 // Device model
 function getDevices(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
-        conn.query("SELECT * FROM devices",  function (err, rows) {
+        conn.query("SELECT * FROM devices", function (err, rows) {
             conn.release();
             callback(err, rows);
         });
@@ -204,8 +250,9 @@ function getDevices(callback) {
 }
 function addDevice(obj, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("INSERT INTO devices SET ?", obj, function (err) {
@@ -216,20 +263,22 @@ function addDevice(obj, callback) {
 }
 function getDeviceById(device_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM devices WHERE ?", {dev_id: device_id}, function (err, rows, fields) {
             conn.release();
-            callback(err, rows);
+            callback(err, rows[0]);
         });
     });
 }
 function getDeviceByName(device_name, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM devices WHERE ?", {dev_name: device_name}, function (err, res) {
@@ -240,8 +289,9 @@ function getDeviceByName(device_name, callback) {
 }
 function getDeviceByMAC(device_mac, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM devices WHERE ?", {dev_mac: device_mac}, function (err, res) {
@@ -250,13 +300,60 @@ function getDeviceByMAC(device_mac, callback) {
         });
     });
 }
+function getDeviceActions(device_id, callback) {
+    getDeviceById(device_id, function (err, device) {
+        if (err) {
+            logger.error(TAG, err);
+            callback(err);
+            return
+        }
+        if (typeof device == "undefined") {
+            callback(null, []);
+            return
+        }
+        getLibrariesBySingleUID(device.dev_uid, function (err, libraries) {
+            if (err) {
+                logger.error(TAG, err);
+                callback(err);
+                return
+            }
+            logger.debug(TAG, "found libs of "+device.dev_uid, libraries);
+            var functions = [];
+            async.each(libraries, function (lib, cb) {
+                getFunctionsByLibrary(lib.lib_id, function (err, rows) {
+                    if (err) {
+                        logger.error(TAG, err);
+                        cb(err);
+                        return
+                    }
+                    logger.debug(TAG, "funcs of "+lib.lib_name, rows);
+
+                    functions = functions.concat(rows);
+
+                    logger.debug(TAG, "functions now", functions);
+
+                    cb();
+                })
+            }, function (err) {
+                if (err) {
+                    logger.error(TAG, err);
+                    callback(err);
+                    return
+                }
+                callback(null, functions);
+            })
+        })
+    })
+}
 function deleteDeviceById(device_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("DELETE FROM devices WHERE ?", {lib_id: device_id}, function (err, rows, fields) {
+            conn.release();
             if (rows.length > 0) callback(rows);
             else callback(false);
         });
@@ -266,11 +363,12 @@ function deleteDeviceById(device_id, callback) {
 // Function model
 function truncateFunctions(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
-        conn.query("TRUNCATE TABLE functions",  function (err, rows) {
+        conn.query("TRUNCATE TABLE functions", function (err, rows) {
             conn.release();
             callback(err, rows);
         });
@@ -278,11 +376,12 @@ function truncateFunctions(callback) {
 }
 function getFunctions(callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
-        conn.query("SELECT * FROM functions",  function (err, rows) {
+        conn.query("SELECT * FROM functions", function (err, rows) {
             conn.release();
             callback(err, rows);
         });
@@ -290,8 +389,9 @@ function getFunctions(callback) {
 }
 function addFunction(obj, callback) {
     db.getConnection(function (err, conn) {
-        if(err) {
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("INSERT INTO functions SET ?", obj, function (err) {
@@ -304,8 +404,9 @@ function addFunction(obj, callback) {
 }
 function getFunctionById(function_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM functions WHERE ?", {function_id: function_id}, function (err, rows, fields) {
@@ -316,8 +417,9 @@ function getFunctionById(function_id, callback) {
 }
 function getFunctionByName(function_name, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM functions WHERE ?", {function_name: function_name}, function (err, res) {
@@ -328,13 +430,14 @@ function getFunctionByName(function_name, callback) {
 }
 function deleteFunctionById(function_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("DELETE FROM functions WHERE ?", {function_id: function_id}, function (err, rows, fields) {
             conn.release();
-            if( err) {
+            if (err) {
                 callback(err);
                 return
             }
@@ -345,8 +448,9 @@ function deleteFunctionById(function_id, callback) {
 }
 function getFunctionsByLibrary(library_id, callback) {
     db.getConnection(function (err, conn) {
-        if(err){
+        if (err) {
             logger.error(TAG, err);
+            conn.release();
             return
         }
         conn.query("SELECT * FROM functions WHERE ?", {function_library: library_id}, function (err, rows) {
@@ -361,6 +465,7 @@ const Library = {
     getAll: getLbraries,
     getById: getLibraryById,
     getByName: getLibraryByName,
+    getBySingleUID: getLibrariesBySingleUID,
     deleteById: deleteLibraryById,
     truncate: truncateLibraries
 };
@@ -378,6 +483,7 @@ const Device = {
     getById: getDeviceById,
     getByName: getDeviceByName,
     getByMAC: getDeviceByMAC,
+    getActions: getDeviceActions,
     deleteById: deleteDeviceById
 };
 const Func = {

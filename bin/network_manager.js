@@ -6,7 +6,7 @@ const logger = require('./logger');
 const xml2js = require('xml2js');
 const spawn = require('child_process').exec;
 const path = require("path");
-const TAG = "DEVICE_MANAGER";
+const TAG = "NETWORK_MANAGER";
 const lan_config = require("../configs/lan");
 
 function device_scanner(callback) {
