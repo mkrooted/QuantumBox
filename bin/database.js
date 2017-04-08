@@ -66,6 +66,11 @@ function addInterface(obj, callback) {
             return
         }
         conn.query("INSERT INTO interfaces SET ?", obj, function (err) {
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                return
+            }
             conn.query("SELECT LAST_INSERT_ID() as id", function (err, rows) {
                 conn.release();
                 callback(err, rows[0]['id']);
@@ -153,6 +158,11 @@ function addLibrary(obj, callback) {
             return
         }
         conn.query("INSERT INTO libraries SET ?", obj, function (err) {
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                return
+            }
             conn.query("SELECT LAST_INSERT_ID() as id", function (err, rows) {
                 conn.release();
                 callback(err, rows[0]['id']);
@@ -256,8 +266,15 @@ function addDevice(obj, callback) {
             return
         }
         conn.query("INSERT INTO devices SET ?", obj, function (err) {
-            conn.release();
-            callback(err, rows);
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                return
+            }
+            conn.query("SELECT LAST_INSERT_ID() as id", function (err, data) {
+                conn.release();
+                callback(err, data[0]['id']);
+            })
         });
     });
 }
@@ -395,6 +412,11 @@ function addFunction(obj, callback) {
             return
         }
         conn.query("INSERT INTO functions SET ?", obj, function (err) {
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                return
+            }
             conn.query("SELECT LAST_INSERT_ID() as id", function (err, data) {
                 conn.release();
                 callback(err, data[0]['id']);
@@ -411,7 +433,7 @@ function getFunctionById(function_id, callback) {
         }
         conn.query("SELECT * FROM functions WHERE ?", {function_id: function_id}, function (err, rows, fields) {
             conn.release();
-            callback(err, rows);
+            callback(err, rows[0]);
         });
     });
 }
