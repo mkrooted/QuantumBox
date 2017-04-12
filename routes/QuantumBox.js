@@ -12,7 +12,14 @@ const db = require("../bin/database");
 const TAG = "ROUTER (QUANTUMBOX)";
 
 router.get('/', function (req, res, next) {
-    res.render('index', {title: 'QuantumBox: Control Panel'});
+    db.models.Device.getAll(function(err, devices) {
+        if (err) {
+            logger.error(TAG, err);
+            res.sendStatus(500);
+            return
+        }
+        res.render('index', {title: 'QuantumBox: Control Panel', devices: devices});
+    });
 });
 router.get('/manager', function (req, res, next) {
     res.render('manager', {title: 'QuantumBox: Entanglement manager'});
@@ -66,6 +73,20 @@ router.get('/update-interfaces', function (req, res, nxt) {
     interface_manager.loadInterfaces(function (data) {
         res.json(data);
     });
+});
+router.get('/add-device', function (req, res, next) {
+    if (req.query.ip) {
+        db.models.Device.add({
+            "dev_last_ip": req.query.ip
+        }, function (err, id) {
+            if (err) {
+                logger.error(TAG, err);
+                res.sendStatus(500);
+                return
+            }
+            res.redirect("/");
+        })
+    }
 });
 
 module.exports = router;

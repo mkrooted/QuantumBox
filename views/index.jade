@@ -30,12 +30,15 @@ block content
                 td= 'MAC'
                 td= 'IP'
                 td= 'Model'
+                td
             each device in devices
                 tr
-                    td= device.name
-                    td= device.mac
-                    td= device.lastIp
-                    td= device.uid
+                    td= device.dev_name
+                    td= device.dev_mac
+                    td= device.dev_last_ip
+                    td= device.dev_uid
+                    td
+                        a.btn.btn-primary(href="/editDevice/"+device.dev_id)= 'Edit'
         </div>
     else
         div.no-devices
