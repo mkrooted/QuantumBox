@@ -10,3 +10,4 @@ On 18.04.2017
 * Fix: Error handling in some routes
 * Fix: Now libraries' and interfaces' header files don't have "events" section, now using callbacks
 * Cleanup: Do not need "bluetooth" and "button_library" any more
+* Project: Directory init with MySQL Dump File for rapid database setup
