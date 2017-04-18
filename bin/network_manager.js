@@ -30,7 +30,7 @@ function device_scanner(callback) {
             var hosts = [];
             result['nmaprun']['host'].forEach(function (value) {
                 let obj = {
-                    "ip": value.address[0]['$']['addr']
+                    "addr": value.address[0]['$']['addr']
                 };
                 if (value.address[1] && value.address[1]['$']['addr']) {
                     obj['mac'] = value.address[1]['$']['addr']

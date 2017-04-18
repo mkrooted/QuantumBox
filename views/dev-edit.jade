@@ -1,0 +1,44 @@
+extends layout
+block content
+    <body>
+    <nav class="navbar navbar-default">
+    <div class="container">
+    <div class="navbar-header navbar-right-border">
+    <a href="/" class="navbar-brand">QuantumBox HUB</a>
+    </div>
+    <div>
+    <ul class="nav navbar-nav">
+    <li class="btn1"><a href="/">Home</a></li>
+    <li class="btn1"><a href="/lan-scan">Scan for new devices</a></li>
+    <li class="btn1"><a href="/manager">Entanglement manager</a></li>
+    <li class="btn1"><a href="/libs">Libraries manager</a></li>
+    <li class="btn1"><a href="/interfaces">Interfaces manager</a></li>
+    </ul>
+    </div>
+    </div>
+    </nav>
+    <div class="container">
+    <div class="jumbotron">
+    h2= "You are editing \"" + device.dev_name + "\" (" + device.dev_mac + ")"
+    </div>
+    </div>
+    <div class="container">
+    <div class="panel panel-default">
+    form
+        div.form-group
+            label(for="dev-name")= "Device Name"
+            input.form-control(type="text" id="dev-name" value=device.dev_name)
+        div.form-group
+            label(for="dev-vendor")= "Manufacturer"
+            input.form-control(type="text" id="dev-vendor" value=device.dev_vendor disabled)
+        div.form-group
+            label(for="dev-mac")= "Physical Address"
+            input.form-control(type="text" id="dev-mac" value=device.dev_mac disabled)
+        div.form-group
+            label(for="dev-addr")= "Network Address"
+            input.form-control(type="text" id="dev-addr" value=device.dev_address disabled)
+        div.form-group
+            label(for="dev-uid")= "Unique Model ID"
+            input.form-control(type="text" id="dev-uid" value=device.dev_uid disabled)
+    </div>
+    </div>

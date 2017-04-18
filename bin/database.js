@@ -366,12 +366,19 @@ function deleteDeviceById(device_id, callback) {
         if (err) {
             logger.error(TAG, err);
             conn.release();
+            callback(err);
             return
         }
-        conn.query("DELETE FROM devices WHERE ?", {lib_id: device_id}, function (err, rows, fields) {
+        conn.query("DELETE FROM devices WHERE ?", {dev_id: device_id}, function (err, rows, fields) {
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                callback(err);
+                return
+            }
             conn.release();
-            if (rows.length > 0) callback(rows);
-            else callback(false);
+            if (rows.length > 0) callback(null, rows);
+            else callback(null, false);
         });
     });
 }

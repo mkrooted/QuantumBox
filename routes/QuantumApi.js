@@ -45,13 +45,12 @@ router.get('/devices/:id/actions', function (req, res, next) {
 });
 router.post('/devices/:device_id/actions/:action_id', function (req, res, next) {
     db.models.Device.getById(req.params.device_id, function (err, device) {
-        //TODO: replace prototype version with only ip by full-functional "primary_address" architecture.
         if (err) {
             logger.error(TAG, err);
             res.sendStatus(500);
             return
         }
-        if (device === false || typeof device == "undefined") {
+        if (device === false || typeof device === "undefined") {
             res.sendStatus(404);
             return
         }
@@ -61,7 +60,7 @@ router.post('/devices/:device_id/actions/:action_id', function (req, res, next) 
                 res.sendStatus(500);
                 return
             }
-            if (func === false || typeof func == "undefined") {
+            if (func === false || typeof func === "undefined") {
                 res.sendStatus(404);
                 return
             }

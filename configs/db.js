@@ -1,5 +1,5 @@
 module.exports = {
-  "host": "localhost",
+  "host": "::1",
   "port": 3306,
   "database": "qboxhub",
   "user": "dev",

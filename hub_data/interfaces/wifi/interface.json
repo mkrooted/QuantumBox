@@ -27,27 +27,5 @@
         }
       }
     }
-  },
-  "events": {
-    "GET_json_response": {
-      "args": {
-        "requestId": {
-          "type": "any"
-        },
-        "body": {
-          "type": "object"
-        }
-      }
-    },
-    "GET_string_response": {
-      "args": {
-        "requestId": {
-          "type": "any"
-        },
-        "body": {
-          "type": "object"
-        }
-      }
-    }
   }
 }

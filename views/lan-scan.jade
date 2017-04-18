@@ -25,8 +25,8 @@ block content
     if devices && typeof devices[0] === 'object'
         table.table.table-striped
             tr
-                td= 'MAC'
-                td= 'IP'
+                td= 'Physical Address'
+                td= 'Network Address'
                 td= 'Manufacturer'
                 td
             each device in devices
@@ -34,12 +34,12 @@ block content
                     td
                         span.cell= device.mac
                     td
-                        span.cell= device.ip
+                        span.cell= device.addr
                     td
                         span.cell= device.vendor
                     td
                         span.cell
-                            a.btn.btn-success(href="/add-device?ip=" + device.ip)= 'Add this device'
+                            a.btn.btn-success(href="/add-device?addr=" + device.address)= 'Add this device'
     else
         div.no-devices
             h3= 'No devices'

@@ -75,9 +75,9 @@ router.get('/update-interfaces', function (req, res, nxt) {
     });
 });
 router.get('/add-device', function (req, res, next) {
-    if (req.query.ip) {
+    if (req.query.addr) {
         db.models.Device.add({
-            "dev_last_ip": req.query.ip
+            "dev_address": req.query.addr
         }, function (err, id) {
             if (err) {
                 logger.error(TAG, err);
@@ -86,6 +86,34 @@ router.get('/add-device', function (req, res, next) {
             }
             res.redirect("/");
         })
+    }
+});
+router.get('/edit-device/:id', function (req, res, nxt) {
+    if (req.params.id) {
+        db.models.Device.getById(req.params.id, function (err, device) {
+            if (err) {
+                logger.error(TAG, err);
+                res.sendStatus(500);
+                return
+            }
+            res.render('dev-edit', {title: "Device "+device.dev_name, device: device})
+        });
+    } else {
+        res.sendStatus(404);
+    }
+});
+router.get('/delete-device/:id', function (req, res, nxt) {
+    if (req.params.id) {
+        db.models.Device.deleteById(req.params.id, function (err, device) {
+            if (err) {
+                logger.error(TAG, err);
+                res.sendStatus(500);
+                return
+            }
+            res.redirect('/');
+        });
+    } else {
+        res.sendStatus(404);
     }
 });
 

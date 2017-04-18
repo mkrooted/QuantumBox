@@ -38,7 +38,8 @@ block content
                     td= device.dev_last_ip
                     td= device.dev_uid
                     td
-                        a.btn.btn-primary(href="/editDevice/"+device.dev_id)= 'Edit'
+                        a.btn.btn-primary(href="/edit-device/"+device.dev_id)= 'Edit'
+                        a.btn.btn-danger(href="/delete-device/"+device.dev_id)= 'Delete'
         </div>
     else
         div.no-devices

@@ -21,30 +21,5 @@
     "light_off": {
       "args": {}
     }
-  },
-  "events": {
-    "hello_response": {
-      "args": {
-        "body":{
-          "uid": "string",
-          "name": "string"
-        }
-      }
-    },
-    "get_status_response": {
-      "args": {
-        "state": "bool"
-      }
-    },
-    "light_on_response": {
-      "args": {
-        "body": "string"
-      }
-    },
-    "light_off_response": {
-      "args": {
-        "body": "string"
-      }
-    }
   }
 }
