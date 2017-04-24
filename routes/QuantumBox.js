@@ -1,7 +1,3 @@
-/**
- * Created by mkrooted on 3/8/2017.
- */
-
 const express = require('express');
 const router = express.Router();
 const device_manager = require("../bin/network_manager");
@@ -9,16 +5,49 @@ const library_manager = require("../bin/library_manager");
 const interface_manager = require("../bin/interface_manager");
 const logger = require("../bin/logger");
 const db = require("../bin/database");
+const common = require("./Common");
+const async = require("async");
 const TAG = "ROUTER (QUANTUMBOX)";
 
 router.get('/', function (req, res, next) {
-    db.models.Device.getAll(function(err, devices) {
+    db.models.Device.getAll(function (err, devices) {
         if (err) {
             logger.error(TAG, err);
             res.sendStatus(500);
             return
         }
-        res.render('index', {title: 'QuantumBox: Control Panel', devices: devices});
+
+        let compiled_actions = {};
+        async.each(devices, function (dev, cb) {
+            db.models.Device.getActions(dev.dev_id, function (err, actions) {
+                if (err) {
+                    logger.error(TAG + ": In '/'.async.each", err);
+                    cb(err);
+                    return
+                }
+                valid_functions = [];
+
+                for (let func of actions) {
+                    if (func.function_type === "ACT") {
+                        valid_functions.push(func);
+                    }
+                }
+
+                compiled_actions[dev.dev_id] = valid_functions;
+                cb();
+            })
+        }, function (err) {
+            if (err) {
+                logger.error(TAG, err);
+                res.sendStatus(500);
+                return
+            }
+            devices.map(function (item) {
+                item.actions = compiled_actions[item.dev_id];
+            });
+
+            res.render('index', {title: 'QuantumBox: Control Panel', devices: devices});
+        });
     });
 });
 router.get('/manager', function (req, res, next) {
@@ -55,29 +84,78 @@ router.get('/interfaces', function (req, res, next) {
 });
 router.get('/lan-scan', function (req, res, next) {
     device_manager.scan(function (err, result) {
+        if (err) {
+            logger.error(TAG, err);
+            res.sendStatus(500);
+            return;
+        }
+        db.models.Device.getAll(function (err, db_devices) {
             if (err) {
                 logger.error(TAG, err);
                 res.sendStatus(500);
                 return;
             }
-            res.render('lan-scan', {title: 'QuantumBox: Add device', devices: result});
-        }
-    );
+
+            let devices = [];
+            for (let item of result) {
+                let found = false;
+                for (let dev of db_devices) {
+                    if (item.addr === dev.dev_address) {
+                        found = true;
+                        break
+                    }
+                }
+                if (found) {
+                    continue
+                }
+                devices.push(item)
+            }
+
+            res.render('lan-scan', {title: 'QuantumBox: Add device', devices: devices});
+        });
+    });
 });
 router.get('/update-libs', function (req, res, nxt) {
     library_manager.loadLibraries(function (data) {
-        res.json(data);
+        logger.log(TAG, data);
+        res.redirect('/libs');
     });
 });
 router.get('/update-interfaces', function (req, res, nxt) {
     interface_manager.loadInterfaces(function (data) {
-        res.json(data);
+        logger.log(TAG, data);
+        res.redirect('/interfaces');
     });
 });
+router.get('/dev-add', function (req, res, nxt) {
+    if (req.query.addr && req.query.mac && req.query.vendor) {
+        db.models.Library.getAll(function (err, libs) {
+            if (err) {
+                logger.error(TAG, err);
+                res.sendStatus(500);
+                return
+            }
+            libs.map(function (lib) {
+                lib.lib_uids = JSON.parse(lib.lib_uids)
+            });
+            res.render('dev-add', {
+                device: {
+                    dev_vendor: req.query.vendor,
+                    dev_mac: req.query.mac,
+                    dev_address: req.query.addr
+                },
+                libraries: libs
+            })
+        });
+    }
+});
 router.get('/add-device', function (req, res, next) {
-    if (req.query.addr) {
+    if (req.query.addr && req.query.mac && req.query.vendor) {
         db.models.Device.add({
-            "dev_address": req.query.addr
+            "dev_address": req.query.addr,
+            "dev_mac": req.query.mac,
+            "dev_vendor": req.query.vendor,
+            "dev_uid": req.query.uid
         }, function (err, id) {
             if (err) {
                 logger.error(TAG, err);
@@ -85,6 +163,26 @@ router.get('/add-device', function (req, res, next) {
                 return
             }
             res.redirect("/");
+        })
+    }
+});
+router.post('/edit-device/:id', function (req, res, nxt) {
+    if (req.params.id) {
+        let device = {
+            dev_mac: req.body.dev_mac,
+            dev_address: req.body.dev_address,
+            dev_uid: req.body.dev_uid,
+            dev_vendor: req.body.dev_vendor,
+            dev_name: req.body.dev_name,
+        };
+
+        db.models.Device.update(req.params.id, device, function (err) {
+            if (err) {
+                logger.error(TAG, err);
+                res.sendStatus(500);
+                return
+            }
+            res.redirect("/edit-device/" + req.params.id)
         })
     }
 });
@@ -96,7 +194,12 @@ router.get('/edit-device/:id', function (req, res, nxt) {
                 res.sendStatus(500);
                 return
             }
-            res.render('dev-edit', {title: "Device "+device.dev_name, device: device})
+
+            if (!device.dev_name) {
+                device.dev_name = device.dev_vendor + " Device";
+            }
+
+            res.render('dev-edit', {title: "Device " + device.dev_name, device: device})
         });
     } else {
         res.sendStatus(404);
@@ -115,6 +218,19 @@ router.get('/delete-device/:id', function (req, res, nxt) {
     } else {
         res.sendStatus(404);
     }
+});
+
+router.get('/execute', function (req, res, nxt) {
+    if (req.query.dev_id && req.query.act_id) {
+        common.execute_action(req.query.dev_id, req.query.act_id, function (err, result) {
+            if (err) {
+                logger.error(TAG, err);
+            }
+        })
+    } else {
+        logger.error(TAG, "Trying to '/execute' with no arguments from " + req.ip + "!");
+    }
+    res.redirect('/')
 });
 
 module.exports = router;

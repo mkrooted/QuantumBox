@@ -1,6 +1,3 @@
-/**
- * Created by mkrooted on 3/9/2017.
- */
 const db = require("./database");
 const fs = require("fs");
 const path = require("path");
@@ -24,7 +21,7 @@ function loadInterfaces(callback) {
             });
         },
         (res, cb) => {
-            const path_base = path.join(__dirname, "../../hub_data/interfaces");
+            const path_base = path.join(__dirname, "../hub_data/interfaces");
             const interfaces = getDirectories(path_base);
 
             for (let _interface of interfaces) {

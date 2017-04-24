@@ -39,7 +39,7 @@ block content
                         span.cell= device.vendor
                     td
                         span.cell
-                            a.btn.btn-success(href="/add-device?addr=" + device.address)= 'Add this device'
+                            a.btn.btn-success(href="/dev-add?addr=" + device.addr + "&mac=" + device.mac + "&vendor=" + device.vendor)= 'Add this device'
     else
         div.no-devices
             h3= 'No devices'

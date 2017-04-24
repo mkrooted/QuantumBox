@@ -6,11 +6,11 @@
         "device_ip": {
           "type": "string"
         },
-        "path": {
+        "port": {
           "type": "string"
         },
-        "requestId": {
-          "type": "any"
+        "path": {
+          "type": "string"
         }
       }
     },
@@ -19,11 +19,27 @@
         "device_ip": {
           "type": "string"
         },
+        "port": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "POST_json": {
+      "args": {
+        "device_ip": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
         "path": {
           "type": "string"
         },
-        "requestId": {
-          "type": "any"
+        "data": {
+          "type": "string"
         }
       }
     }

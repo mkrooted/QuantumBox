@@ -20,29 +20,43 @@ block content
     <div class="jumbotron">
     <h2>Welcome on index of QuantumBox control panel!</h2>
     </div>
-    <div class="panel panel-default">
-    <div class="panel-heading">Active devices</div>
-    if devices && devices.length>0
-        <div class="table">
-        table.table.table-striped
-            tr
-                td= 'Name'
-                td= 'MAC'
-                td= 'IP'
-                td= 'Model'
-                td
-            each device in devices
-                tr
-                    td= device.dev_name
-                    td= device.dev_mac
-                    td= device.dev_last_ip
-                    td= device.dev_uid
-                    td
-                        a.btn.btn-primary(href="/edit-device/"+device.dev_id)= 'Edit'
-                        a.btn.btn-danger(href="/delete-device/"+device.dev_id)= 'Delete'
-        </div>
-    else
-        div.no-devices
-            h3= 'No devices'
-    </div>
+    div
+        div.panel.panel-default
+            div.panel-heading= "Active Devices"
+            if devices && devices.length > 0
+                div.table
+                    table.table.table-striped
+                        tr
+                            td= 'Name'
+                            td= 'MAC'
+                            td= 'IP'
+                            td= 'Model'
+                            td
+                        each device in devices
+                            tr
+                                td= device.dev_name
+                                td= device.dev_mac
+                                td= device.dev_address
+                                td= device.dev_uid
+                                td
+                                    a.btn.btn-primary(href="/edit-device/" + device.dev_id)= 'Edit'
+                                    a.btn.btn-danger(href="/delete-device/" + device.dev_id)= 'Delete'
+            else
+                div.no-devices
+                    h3= 'No devices'
+        if devices && devices.length>0
+            div.panel.panel-default
+                div.panel-heading= "Actions"
+                div.device-box
+                    each device in devices
+                        if device.actions.length>0
+                            div.device-box_item
+                                if device.dev_name
+                                    h3
+                                        a(href="/edit-device/"+device.dev_id)= device.dev_name
+                                else
+                                    h3
+                                        a(href="/edit-device/"+device.dev_id)= device.dev_vendor + " Device"
+                                each action in device.actions
+                                    a.device-action(href="/execute?dev_id=" + device.dev_id + "&act_id=" + action.function_id)= action.function_name
     </div>

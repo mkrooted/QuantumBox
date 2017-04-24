@@ -24,21 +24,23 @@ block content
     </div>
     <div class="container">
     <div class="panel panel-default">
-    form
+    form.dev-edit(action="" method="post")
         div.form-group
             label(for="dev-name")= "Device Name"
-            input.form-control(type="text" id="dev-name" value=device.dev_name)
+            input.form-control(type="text" id="dev-name" name="dev_name" value=device.dev_name)
         div.form-group
             label(for="dev-vendor")= "Manufacturer"
-            input.form-control(type="text" id="dev-vendor" value=device.dev_vendor disabled)
+            input.form-control(type="text" id="dev-vendor" name="dev_vendor" value=device.dev_vendor disabled)
         div.form-group
             label(for="dev-mac")= "Physical Address"
-            input.form-control(type="text" id="dev-mac" value=device.dev_mac disabled)
+            input.form-control(type="text" id="dev-mac" name="dev_mac" value=device.dev_mac disabled)
         div.form-group
             label(for="dev-addr")= "Network Address"
-            input.form-control(type="text" id="dev-addr" value=device.dev_address disabled)
+            input.form-control(type="text" id="dev-addr" name="dev_address" value=device.dev_address disabled)
         div.form-group
             label(for="dev-uid")= "Unique Model ID"
-            input.form-control(type="text" id="dev-uid" value=device.dev_uid disabled)
+            input.form-control(type="text" id="dev-uid" name="dev_uid" value=device.dev_uid disabled)
+        div.form-group
+            input.form-control(type="submit" id="dev-submit" value="Save")
     </div>
     </div>

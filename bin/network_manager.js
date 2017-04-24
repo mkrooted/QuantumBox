@@ -1,7 +1,3 @@
-/**
- * Created by mkrooted on 2/22/2017.
- */
-
 const logger = require('./logger');
 const xml2js = require('xml2js');
 const spawn = require('child_process').exec;

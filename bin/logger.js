@@ -1,7 +1,3 @@
-/**
- * Created by mkrooted on 3/8/2017.
- */
-
 function error(tag, ...args) {
     for (let arg of args) {
         console.error("ERROR -", tag, "-", arg);

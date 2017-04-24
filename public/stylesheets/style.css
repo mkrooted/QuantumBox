@@ -38,3 +38,43 @@ a {
     padding: 10px;
     text-align: center;
 }
+
+.dev-edit {
+    padding: 10px;
+}
+
+.device-box {
+    display: flex;
+    padding: 10px;
+}
+
+.device-box_item {
+    display: inline-block;
+    overflow: auto;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 200px;
+    min-height: 200px;
+}
+
+.device-action {
+    display: block;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 100%;
+    transition-duration: 200ms;
+}
+.device-action:hover {
+    text-decoration: none;
+    background-color: beige;
+    transition-duration: 200ms;
+}
+.device-action:active {
+    text-decoration: none;
+    background-color: azure;
+    transition-duration: 200ms;
+}

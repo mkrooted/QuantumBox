@@ -1,0 +1,49 @@
+extends layout
+block content
+    <body>
+    <nav class="navbar navbar-default">
+    <div class="container">
+    <div class="navbar-header navbar-right-border">
+    <a href="/" class="navbar-brand">QuantumBox HUB</a>
+    </div>
+    <div>
+    <ul class="nav navbar-nav">
+    <li class="btn1"><a href="/">Home</a></li>
+    <li class="btn1"><a href="/lan-scan">Scan for new devices</a></li>
+    <li class="btn1"><a href="/manager">Entanglement manager</a></li>
+    <li class="btn1"><a href="/libs">Libraries manager</a></li>
+    <li class="btn1"><a href="/interfaces">Interfaces manager</a></li>
+    </ul>
+    </div>
+    </div>
+    </nav>
+    <div class="container">
+    <div class="jumbotron">
+    h2= "You are about to add new " + device.dev_vendor + " device (" + device.dev_mac + ")"
+    </div>
+    </div>
+    <div class="container">
+    div.panel.panel-default
+        div.panel-heading= "Select appropriate library:"
+        div.device-box
+            each lib in libraries
+                div.device-box_item
+                    h3=lib.lib_title
+                    each uid in lib.lib_uids
+                        a.device-action(href="/add-device?addr=" + device.dev_address + "&mac=" + device.dev_mac + "&vendor=" + device.dev_vendor + "&uid=" + uid)= uid
+    div.panel.panel-default
+        div.panel-heading= "Details"
+        form.dev-edit(action="" method="post" id="device-form")
+            div.form-group
+                label(for="dev-vendor")= "Manufacturer"
+                input.form-control(type="text" id="dev-vendor" name="dev_vendor" value=device.dev_vendor disabled)
+            div.form-group
+                label(for="dev-mac")= "Physical Address"
+                input.form-control(type="text" id="dev-mac" name="dev_mac" value=device.dev_mac disabled)
+            div.form-group
+                label(for="dev-addr")= "Network Address"
+                input.form-control(type="text" id="dev-addr" name="dev_address" value=device.dev_address disabled)
+            div.form-group
+                label(for="dev-uid")= "Unique Model ID"
+                input.form-control(type="text" id="dev-uid" name="dev_uid" value=device.dev_uid disabled)
+    </div>

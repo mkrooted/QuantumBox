@@ -1,6 +1,3 @@
-/**
- * Created by mkrooted on 3/8/2017.
- */
 const mysql = require("node-mysql");
 const DB = mysql.DB;
 const db = new DB(require('../configs/db'));
@@ -382,6 +379,49 @@ function deleteDeviceById(device_id, callback) {
         });
     });
 }
+function updateDevice(device_id, device, callback) {
+    db.getConnection(function (err, conn) {
+        if (err) {
+            logger.error(TAG, err);
+            conn.release();
+            callback(err);
+            return
+        }
+
+        let parameter = {};
+        parameter.dev_id = device_id;
+        if (device.dev_hash) {
+            parameter.dev_hash = device.dev_hash;
+        }
+        if (device.dev_mac) {
+            parameter.dev_mac = device.dev_mac;
+        }
+        if (device.dev_vendor) {
+            parameter.dev_vendor = device.dev_vendor;
+        }
+        if (device.dev_name) {
+            parameter.dev_name = device.dev_name;
+        }
+        if (device.dev_address) {
+            parameter.dev_address = device.dev_address;
+        }
+        if (device.dev_uid) {
+            parameter.dev_uid = device.dev_uid;
+        }
+
+        conn.query("UPDATE devices SET ? WHERE ?", [parameter, {dev_id: device_id}], function (err, rows, fields) {
+            if (err) {
+                logger.error(TAG, err);
+                conn.release();
+                callback(err);
+                return
+            }
+            conn.release();
+            callback(null);
+        });
+    });
+}
+
 
 // Function model
 function truncateFunctions(callback) {
@@ -512,7 +552,8 @@ const Device = {
     getByName: getDeviceByName,
     getByMAC: getDeviceByMAC,
     getActions: getDeviceActions,
-    deleteById: deleteDeviceById
+    deleteById: deleteDeviceById,
+    update: updateDevice
 };
 const Func = {
     add: addFunction,

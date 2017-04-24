@@ -1,19 +1,14 @@
 {
-  "name": "led_library",
-  "title": "Yet Another DIY Lamp",
+  "name": "yeelight_alfa",
+  "title": "Xiaomi Yeelight Bulb",
   "version": "0.0.1",
   "supported_devices": [
-    "aaaa-aaaa-aaaa-aaaa",
-    "bbbb-bbbb-bbbb-bbbb"
+    "yeelight-bulb"
   ],
-  "manufacturer": "QuantumBox",
+  "manufacturer": "Xiaomi",
   "interface": "wifi",
   "functions": {
-    "hello": {
-      "type": "SYS",
-      "args": {}
-    },
-    "get_status": {
+    "powered_on": {
       "type": "GET",
       "args": {}
     },
