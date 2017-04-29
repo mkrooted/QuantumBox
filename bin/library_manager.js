@@ -44,11 +44,16 @@ function loadLibraries(callback) {
                     }
                     var lib_id = data;
                     const functions_names = library_data.functions;
+
                     for (let func in functions_names) {
+                        if (!library_data.functions[func].title || library_data.functions[func].title === null) {
+                            library_data.functions[func].title = func;
+                        }
                         db.models.Function.add({
                             "function_library": lib_id,
                             "function_name": func,
-                            "function_type": library_data.functions[func].type
+                            "function_title": library_data.functions[func].title,
+                            "function_type": library_data.functions[func].type,
                         }, function (err, data) {
                             if (err) {
                                 logger.error(TAG, err);

@@ -25,7 +25,8 @@ router.get('/', function (req, res, next) {
                     cb(err);
                     return
                 }
-                valid_functions = [];
+                let valid_functions = [];
+
 
                 for (let func of actions) {
                     if (func.function_type === "ACT") {
@@ -45,6 +46,8 @@ router.get('/', function (req, res, next) {
             devices.map(function (item) {
                 item.actions = compiled_actions[item.dev_id];
             });
+
+            // logger.debug(TAG, devices);
 
             res.render('index', {title: 'QuantumBox: Control Panel', devices: devices});
         });

@@ -31,7 +31,7 @@ router.get('/devices/:id', function (req, res, next) {
     });
 });
 router.get('/devices/:id/actions', function (req, res, next) {
-    db.models.Device.getActions(req.params.id, function (err, funcs) {
+    db.models.Device.getUserActions(req.params.id, function (err, funcs) {
         if(err){
             logger.error(TAG, err);
             res.sendStatus(500);

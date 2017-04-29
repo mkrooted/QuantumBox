@@ -25,3 +25,12 @@ module.exports.light_off = function (hard_interface, device, callback) {
 
     hard_interface.POST_json(device.dev_address, 55443, '/', JSON.stringify(data), callback)
 };
+module.exports.toggle_light = function (hard_interface, device, callback) {
+    var data = {
+        "id": 0,
+        "method": "toggle",
+        "params": [""]
+    };
+
+    hard_interface.POST_json(device.dev_address, 55443, '/', JSON.stringify(data), callback)
+};

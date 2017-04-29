@@ -330,7 +330,7 @@ function getDeviceActions(device_id, callback) {
                 callback(err);
                 return
             }
-            logger.debug(TAG, "found libs of "+device.dev_uid, libraries);
+            // logger.debug(TAG, "found libs of "+device.dev_uid, libraries);
             var functions = [];
             async.each(libraries, function (lib, cb) {
                 getFunctionsByLibrary(lib.lib_id, function (err, rows) {
@@ -339,11 +339,11 @@ function getDeviceActions(device_id, callback) {
                         cb(err);
                         return
                     }
-                    logger.debug(TAG, "funcs of "+lib.lib_name, rows);
+                    // logger.debug(TAG, "funcs of "+lib.lib_name, rows);
 
                     functions = functions.concat(rows);
 
-                    logger.debug(TAG, "functions now", functions);
+                    // logger.debug(TAG, "functions now", functions);
 
                     cb();
                 })
@@ -353,6 +353,59 @@ function getDeviceActions(device_id, callback) {
                     callback(err);
                     return
                 }
+                callback(null, functions);
+            })
+        })
+    })
+}
+function getDeviceUserActions(device_id, callback) {
+    getDeviceById(device_id, function (err, device) {
+        if (err) {
+            logger.error(TAG, err);
+            callback(err);
+            return
+        }
+        if (typeof device == "undefined") {
+            callback(null, []);
+            return
+        }
+        getLibrariesBySingleUID(device.dev_uid, function (err, libraries) {
+            if (err) {
+                logger.error(TAG, err);
+                callback(err);
+                return
+            }
+            // logger.debug(TAG, "found libs of "+device.dev_uid, libraries);
+            var functions = [];
+            async.each(libraries, function (lib, cb) {
+                getFunctionsByLibrary(lib.lib_id, function (err, rows) {
+                    if (err) {
+                        logger.error(TAG, err);
+                        cb(err);
+                        return
+                    }
+                    // logger.debug(TAG, "funcs of "+lib.lib_name, rows);
+
+                    let parsedRows = [];
+                    for (let row of rows) {
+                        if (row.function_type === 'ACT') {
+                            parsedRows.push(row)
+                        }
+                    }
+
+                    functions = functions.concat(parsedRows);
+
+                    // logger.debug(TAG, "functions now", functions);
+
+                    cb();
+                })
+            }, function (err) {
+                if (err) {
+                    logger.error(TAG, err);
+                    callback(err);
+                    return
+                }
+
                 callback(null, functions);
             })
         })
@@ -552,6 +605,7 @@ const Device = {
     getByName: getDeviceByName,
     getByMAC: getDeviceByMAC,
     getActions: getDeviceActions,
+    getUserActions: getDeviceUserActions,
     deleteById: deleteDeviceById,
     update: updateDevice
 };

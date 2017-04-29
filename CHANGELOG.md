@@ -1,5 +1,9 @@
 ## Here we write as many changes made as possible
 
+### Version 0.1.3
+On 29.04.2017
+* Minor fixes, optimization and cleanup
+
 ### Version 0.1.2
 On 24.04.2017
 * Major: New Library for Xiaomi Yeelight Bulb

@@ -14,10 +14,17 @@
     },
     "light_on": {
       "type": "ACT",
+      "title": "Turn light on",
       "args": {}
     },
     "light_off": {
       "type": "ACT",
+      "title": "Turn light off",
+      "args": {}
+    },
+    "toggle_light": {
+      "type": "ACT",
+      "title": "Toggle light",
       "args": {}
     }
   }
