@@ -19,7 +19,7 @@ block content
     </nav>
     <div class="container">
     <div class="jumbotron">
-    h2= "You are editing \"" + device.dev_name + "\" (" + device.dev_mac + ")"
+    h2= "You are editing \"" + device.dev_name + "\"" + (device.dev_mac ? "(" + device.dev_mac + ")" : "")
     </div>
     </div>
     <div class="container">

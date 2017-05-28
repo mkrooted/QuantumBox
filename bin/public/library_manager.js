@@ -27,11 +27,12 @@ function loadLibraries(callback) {
             });
         },
         (res, cb) => {
-            const path_base = path.join(__dirname, "../hub_data/libraries");
+            const path_base = path.join(__dirname, "../../hub_data/libraries");
             const libs = getDirectories(path_base);
             for (let lib in libs) {
                 const str_path = path.join(path_base, libs[lib]);
                 const library_data = JSON.parse(fs.readFileSync(str_path + "/library.json"));
+                logger.debug(TAG, library_data);
                 db.models.Library.add({
                     "lib_name": library_data.name,
                     "lib_interface": library_data.interface,
@@ -42,7 +43,7 @@ function loadLibraries(callback) {
                         logger.error(TAG, err);
                         return;
                     }
-                    var lib_id = data;
+                    let lib_id = data;
                     const functions_names = library_data.functions;
 
                     for (let func in functions_names) {
@@ -57,7 +58,6 @@ function loadLibraries(callback) {
                         }, function (err, data) {
                             if (err) {
                                 logger.error(TAG, err);
-                                return
                             }
                         })
                     }

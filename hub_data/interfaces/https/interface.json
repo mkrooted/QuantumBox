@@ -1,5 +1,6 @@
 {
   "name": "wifi",
+  "virtual": true,
   "functions": {
     "GET_json": {
       "args": {

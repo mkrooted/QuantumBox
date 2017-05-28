@@ -1,25 +1,35 @@
-var http = require("http");
-const config = require("../../../configs/general.js");
+const http = require("http");
+const config = quantum_config("general");
+const logger = quantum_module("logger");
 
 function GET_json(device_ip, port, path, callback) {
-    http.request({
+    let req = http.request({
         "hostname": device_ip,
         "path": path,
         "port": port
-    }, function (res) {
-        var str = '';
-
+    });
+    req.setTimeout(config.endpoint.request_timeout, function () {
+        console.log("timeout and end!");
+        callback(JSON.stringify({
+            status: "NO_DATA"
+        }));
+    });
+    req.on('error', (e) => {
+        console.log('problem with request:', e);
+    });
+    req.on('response', function (res) {
+        let str = '';
         res.on('data', function (chunk) {
             str += chunk;
         });
-
         res.on('end', function () {
             callback(JSON.parse(str));
         });
     });
+    req.end();
 }
 function GET_string(device_ip, port, path, callback) {
-    var req = http.request({
+    let req = http.request({
         "hostname": device_ip,
         "path": path,
         "method": "GET",
@@ -27,14 +37,16 @@ function GET_string(device_ip, port, path, callback) {
     });
     req.setTimeout(config.endpoint.request_timeout, function () {
         console.log("timeout and end!");
-        callback("{\"status\": \"NO_DATA\"}");
+        callback(JSON.stringify({
+            status: "NO_DATA"
+        }));
     });
     req.on('error', (e) => {
         console.log('problem with request:', e);
     });
     req.on('response', res =>{
         console.log("statuscode: "+res);
-        var str = '';
+        let str = '';
 
         res.on('data', function (chunk) {
             console.log("Hmmm...");
@@ -50,29 +62,30 @@ function GET_string(device_ip, port, path, callback) {
 }
 
 function POST_json(device_ip, port, path, data, callback) {
-    var req = http.request({
+    let req = http.request({
         "hostname": device_ip,
         "path": path,
         "method": "POST",
         "port": port
-    }, function (res) {
-        var str = '';
-
-        //another chunk of data has been recieved, so append it to `str`
+    });
+    req.setTimeout(config.endpoint.request_timeout, function () {
+        console.log("timeout and end!");
+        callback(JSON.stringify({
+            status: "NO_DATA"
+        }));
+    });
+    req.on('error', (e) => {
+        console.log('problem with request:', e);
+    });
+    req.on('response', function (res) {
+        let str = '';
         res.on('data', function (chunk) {
             str += chunk;
         });
-
-        //the whole response has been recieved, so we just print it out here
         res.on('end', function () {
             callback(str);
         });
     });
-
-    req.on('error', (e) => {
-        console.log('problem with request:', e);
-    });
-
     req.write(data);
     req.end();
 }

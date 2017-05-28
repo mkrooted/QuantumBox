@@ -31,8 +31,8 @@ module.exports.execute_action = function (device_id, action_id, callback) {
                     return
                 }
                 logger.debug(TAG, "Gonna load:", library.lib_name + "." + func.function_name + "()", "Interface: "+library.lib_interface);
-                const lib_bin = require("../hub_data/libraries/" + library.lib_name + "/functions");
-                const intrfc = require("../hub_data/interfaces/" + library.lib_interface + "/functions");
+                const lib_bin = quantum_library(library.lib_name);
+                const intrfc = quantum_interface(library.lib_interface);
                 lib_bin[func.function_name](intrfc, device, function(body) {
 
                     if (!body) {

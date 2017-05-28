@@ -21,7 +21,7 @@ function loadInterfaces(callback) {
             });
         },
         (res, cb) => {
-            const path_base = path.join(__dirname, "../hub_data/interfaces");
+            const path_base = path.join(__dirname, "../../hub_data/interfaces");
             const interfaces = getDirectories(path_base);
 
             for (let _interface of interfaces) {
@@ -31,9 +31,7 @@ function loadInterfaces(callback) {
                 for (let func in interface_data.functions) {
                     let args = "(";
                     let args_raw = Object.keys(interface_data.functions[func].args);
-
                     args += args_raw.join(", ");
-
                     args += ")";
                     functions.push(func+args);
                 }
@@ -41,10 +39,10 @@ function loadInterfaces(callback) {
                 db.models.Interface.add({
                     "interface_name": interface_data.name,
                     "interface_functions": JSON.stringify(functions),
+                    "interface_is_virtual": interface_data.virtual ? 'Y' : 'N'
                 }, function (err, data) {
                     if (err) {
                         logger.error(TAG, err);
-                        return;
                     }
                 });
             }

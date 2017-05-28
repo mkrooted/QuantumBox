@@ -1,12 +1,15 @@
 const logger = require('./logger');
 const xml2js = require('xml2js');
-const spawn = require('child_process').exec;
+const exec = require('child_process').exec;
 const path = require("path");
 const TAG = "NETWORK_MANAGER";
-const lan_config = require("../configs/lan");
+const lan_config = quantum_config("lan");
 
 function device_scanner(callback) {
-    spawn('nmap -oX - -sn ' + lan_config.scan_query, {"cwd": __dirname}, function (err, stdout, stderr) {
+    if (!NMAP_AVAILABLE) {
+        callback("NMAP not available", []);
+    }
+    exec('nmap -oX - -sn ' + lan_config.scan_query, {"cwd": __dirname}, function (err, stdout, stderr) {
         if (err) {
             logger.error(TAG, err);
             callback(err);
@@ -23,7 +26,7 @@ function device_scanner(callback) {
                 callback(err1);
                 return;
             }
-            var hosts = [];
+            let hosts = [];
             result['nmaprun']['host'].forEach(function (value) {
                 let obj = {
                     "addr": value.address[0]['$']['addr']

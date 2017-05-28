@@ -1,12 +1,12 @@
 const express = require('express');
-const router = express.Router();
-const device_manager = require("../bin/network_manager");
-const library_manager = require("../bin/library_manager");
-const interface_manager = require("../bin/interface_manager");
-const common = require("../bin/executor");
-const logger = require("../bin/logger");
-const db = require("../bin/database");
 const async = require("async");
+const network_manager = quantum_module("network_manager");
+const library_manager = quantum_module("library_manager");
+const interface_manager = quantum_module("interface_manager");
+const executor = quantum_module("executor");
+const logger = quantum_module("logger");
+const db = quantum_module("database");
+const router = express.Router();
 const TAG = "ROUTER (API)";
 
 // Devices API
@@ -41,7 +41,7 @@ router.get('/devices/:id/actions', function (req, res, next) {
     })
 });
 router.post('/devices/:device_id/actions/:action_id', function (req, res, nxt) {
-    common.execute_action(req.params.device_id, req.params.action_id, function (err, result) {
+    executor.execute_action(req.params.device_id, req.params.action_id, function (err, result) {
         if (err) {
             logger.error(TAG, err);
             res.render('error', {message: "500 Something gone wrong", error: err});

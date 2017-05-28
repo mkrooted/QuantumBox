@@ -1,15 +1,15 @@
 const express = require('express');
-const router = express.Router();
-const device_manager = require("../bin/network_manager");
-const library_manager = require("../bin/library_manager");
-const interface_manager = require("../bin/interface_manager");
-const logger = require("../bin/logger");
-const db = require("../bin/database");
-const executor = require("../bin/executor");
 const async = require("async");
+const device_manager = quantum_module("network_manager");
+const library_manager = quantum_module("library_manager");
+const interface_manager = quantum_module("interface_manager");
+const logger = quantum_module("logger");
+const db = quantum_module("database");
+const executor = quantum_module("executor");
+const router = express.Router();
 const TAG = "ROUTER (QUANTUMBOX)";
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     db.models.Device.getAll(function (err, devices) {
         if (err) {
             logger.error(TAG, err);
@@ -53,13 +53,13 @@ router.get('/', function (req, res, next) {
         });
     });
 });
-router.get('/manual-add', function(req, res, next){
+router.get('/manual-add', function(req, res){
     res.render('manual-add', {title: "New device"});
 });
-router.get('/manager', function (req, res, next) {
+router.get('/manager', function (req, res) {
     res.render('manager', {title: 'QuantumBox: Entanglement manager'});
 });
-router.get('/libs', function (req, res, next) {
+router.get('/libs', function (req, res) {
     db.models.Library.getAll(function (err, libraries) {
         if (err) {
             logger.error(TAG, err);
@@ -74,7 +74,7 @@ router.get('/libs', function (req, res, next) {
         res.render('libraries', {title: 'QuantumBox: Libraries manager', libraries: libraries});
     });
 });
-router.get('/interfaces', function (req, res, next) {
+router.get('/interfaces', function (req, res) {
     db.models.Interface.getAll(function (err, interfaces) {
         if (err) {
             logger.error(TAG, err);
@@ -88,7 +88,7 @@ router.get('/interfaces', function (req, res, next) {
         res.render('interfaces', {title: 'QuantumBox: Interfaces manager', interfaces: interfaces});
     });
 });
-router.get('/lan-scan', function (req, res, next) {
+router.get('/lan-scan', function (req, res) {
     device_manager.scan(function (err, result) {
         if (err) {
             logger.error(TAG, err);
@@ -121,19 +121,19 @@ router.get('/lan-scan', function (req, res, next) {
         });
     });
 });
-router.get('/update-libs', function (req, res, nxt) {
+router.get('/update-libs', function (req, res) {
     library_manager.loadLibraries(function (data) {
         logger.log(TAG, data);
         res.redirect('/libs');
     });
 });
-router.get('/update-interfaces', function (req, res, nxt) {
+router.get('/update-interfaces', function (req, res) {
     interface_manager.loadInterfaces(function (data) {
         logger.log(TAG, data);
         res.redirect('/interfaces');
     });
 });
-router.get('/dev-add', function (req, res, nxt) {
+router.get('/dev-add', function (req, res) {
     if (req.query.addr && req.query.mac && req.query.vendor) {
         db.models.Library.getAll(function (err, libs) {
             if (err) {
@@ -155,7 +155,7 @@ router.get('/dev-add', function (req, res, nxt) {
         });
     }
 });
-router.get('/add-device', function (req, res, next) {
+router.get('/add-device', function (req, res) {
     if (req.query.addr && req.query.mac && req.query.vendor) {
         db.models.Device.add({
             "dev_address": req.query.addr,
@@ -172,7 +172,7 @@ router.get('/add-device', function (req, res, next) {
         })
     }
 });
-router.post('/edit-device/:id', function (req, res, nxt) {
+router.post('/edit-device/:id', function (req, res) {
     if (req.params.id) {
         let device = {
             dev_mac: req.body.dev_mac,
@@ -192,7 +192,7 @@ router.post('/edit-device/:id', function (req, res, nxt) {
         })
     }
 });
-router.get('/edit-device/:id', function (req, res, nxt) {
+router.get('/edit-device/:id', function (req, res) {
     if (req.params.id) {
         db.models.Device.getById(req.params.id, function (err, device) {
             if (err) {
@@ -211,7 +211,7 @@ router.get('/edit-device/:id', function (req, res, nxt) {
         res.sendStatus(404);
     }
 });
-router.get('/delete-device/:id', function (req, res, nxt) {
+router.get('/delete-device/:id', function (req, res) {
     if (req.params.id) {
         db.models.Device.deleteById(req.params.id, function (err, device) {
             if (err) {
@@ -226,7 +226,7 @@ router.get('/delete-device/:id', function (req, res, nxt) {
     }
 });
 
-router.get('/execute', function (req, res, nxt) {
+router.get('/execute', function (req, res) {
     if (req.query.dev_id && req.query.act_id) {
         executor.execute_action(req.query.dev_id, req.query.act_id, function (err, result) {
             if (err) {
