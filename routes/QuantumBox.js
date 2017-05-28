@@ -5,7 +5,7 @@ const library_manager = require("../bin/library_manager");
 const interface_manager = require("../bin/interface_manager");
 const logger = require("../bin/logger");
 const db = require("../bin/database");
-const common = require("./Common");
+const executor = require("../bin/executor");
 const async = require("async");
 const TAG = "ROUTER (QUANTUMBOX)";
 
@@ -52,6 +52,9 @@ router.get('/', function (req, res, next) {
             res.render('index', {title: 'QuantumBox: Control Panel', devices: devices});
         });
     });
+});
+router.get('/manual-add', function(req, res, next){
+    res.render('manual-add', {title: "New device"});
 });
 router.get('/manager', function (req, res, next) {
     res.render('manager', {title: 'QuantumBox: Entanglement manager'});
@@ -225,7 +228,7 @@ router.get('/delete-device/:id', function (req, res, nxt) {
 
 router.get('/execute', function (req, res, nxt) {
     if (req.query.dev_id && req.query.act_id) {
-        common.execute_action(req.query.dev_id, req.query.act_id, function (err, result) {
+        executor.execute_action(req.query.dev_id, req.query.act_id, function (err, result) {
             if (err) {
                 logger.error(TAG, err);
             }

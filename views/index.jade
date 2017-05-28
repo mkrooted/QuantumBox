@@ -22,7 +22,8 @@ block content
     </div>
     div
         div.panel.panel-default
-            div.panel-heading= "Active Devices"
+            div.panel-heading
+                a.btn.btn-primary(href="/manual-add")= "Add device manually"
             if devices && devices.length > 0
                 div.table
                     table.table.table-striped
@@ -58,5 +59,5 @@ block content
                                     h3
                                         a(href="/edit-device/"+device.dev_id)= device.dev_vendor + " Device"
                                 each action in device.actions
-                                    a.device-action(href="/execute?dev_id=" + device.dev_id + "&act_id=" + action.function_id)= action.function_name
+                                    a.device-action(href="/execute?dev_id=" + device.dev_id + "&act_id=" + action.function_id)= action.function_title
     </div>

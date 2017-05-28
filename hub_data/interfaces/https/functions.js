@@ -1,18 +1,22 @@
-var http = require("http");
-const config = require("../../../configs/general.js");
+var http = require("https");
+/*  Events:
+ *   - GET_json_response (requestId, body)
+ * */
 
 function GET_json(device_ip, port, path, callback) {
     http.request({
         "hostname": device_ip,
         "path": path,
-        "port": port
+        "port": null
     }, function (res) {
         var str = '';
 
+        //another chunk of data has been recieved, so append it to `str`
         res.on('data', function (chunk) {
             str += chunk;
         });
 
+        //the whole response has been recieved, so we just print it out here
         res.on('end', function () {
             callback(JSON.parse(str));
         });
@@ -24,15 +28,7 @@ function GET_string(device_ip, port, path, callback) {
         "path": path,
         "method": "GET",
         "port": port
-    });
-    req.setTimeout(config.endpoint.request_timeout, function () {
-        console.log("timeout and end!");
-        callback("{\"status\": \"NO_DATA\"}");
-    });
-    req.on('error', (e) => {
-        console.log('problem with request:', e);
-    });
-    req.on('response', res =>{
+    }, function (res) {
         console.log("statuscode: "+res);
         var str = '';
 
@@ -41,10 +37,17 @@ function GET_string(device_ip, port, path, callback) {
             str += chunk;
         });
 
+        //the whole response has been recieved, so we just print it out here
         res.on('end', function () {
             console.log("end!");
             callback(str);
         });
+    });
+    req.on('error', (e) => {
+        console.log('problem with request:', e);
+    });
+    req.on('response', function (msg){
+
     });
     req.end();
 }
@@ -54,7 +57,7 @@ function POST_json(device_ip, port, path, data, callback) {
         "hostname": device_ip,
         "path": path,
         "method": "POST",
-        "port": port
+        "port": null
     }, function (res) {
         var str = '';
 

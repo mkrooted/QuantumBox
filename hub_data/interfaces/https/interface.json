@@ -1,0 +1,47 @@
+{
+  "name": "wifi",
+  "functions": {
+    "GET_json": {
+      "args": {
+        "device_ip": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "GET_string": {
+      "args": {
+        "device_ip": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "POST_json": {
+      "args": {
+        "device_ip": {
+          "type": "string"
+        },
+        "port": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

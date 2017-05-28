@@ -1,6 +1,6 @@
-const TAG = "COMMON_ROUTE_FUNCTIONS";
-const logger = require("../bin/logger");
-const db = require("../bin/database");
+const TAG = "EXECUTOR";
+const logger = require("./logger");
+const db = require("./database");
 
 module.exports.execute_action = function (device_id, action_id, callback) {
     db.models.Device.getById(device_id, function (err, device) {
@@ -30,10 +30,16 @@ module.exports.execute_action = function (device_id, action_id, callback) {
                     callback(err);
                     return
                 }
-                logger.debug(TAG, "Gonna load:", "../hub_data/libraries/"+library.lib_name+"/functions", "../hub_data/interfaces/"+library.lib_interface+"/functions");
+                logger.debug(TAG, "Gonna load:", library.lib_name + "." + func.function_name + "()", "Interface: "+library.lib_interface);
                 const lib_bin = require("../hub_data/libraries/" + library.lib_name + "/functions");
                 const intrfc = require("../hub_data/interfaces/" + library.lib_interface + "/functions");
                 lib_bin[func.function_name](intrfc, device, function(body) {
+
+                    if (!body) {
+                        body = "OK"
+                    }
+
+                    logger.debug(TAG, library.lib_name + "." + func.function_name + "() - Out of executor scope");
                     callback(null, body);
                 });
             })

@@ -1,6 +1,6 @@
 {
   "name": "quantumbox",
-  "version": "0.0.0",
+  "version": "0.1.4",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -19,6 +19,7 @@
     "serialport": "^4.0.7",
     "serve-favicon": "~2.3.2",
     "xml2js": "^0.4.17",
-    "async": "latest"
+    "async": "latest",
+    "http-parser-js": "latest"
   }
 }

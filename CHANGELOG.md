@@ -1,5 +1,15 @@
 ## Here we write as many changes made as possible
 
+### Version 0.1.4
+On 28.05.2017
+* Critical: Localized and fixed bug appeared in case of no or invalid response from endpoint devices in "wifi" interface
+* Minor: Now using custom http parser (http-parser-js)
+* Add: configs/general.js for general settings. Now contains endpoint request timeout
+* Add: Now user can add device manually from admin interface
+* Add: Virtual interface "https". Now is used only with workarounds. True virtual interfaces are going to arrive in next versions
+* Move: routes/Common.js to bin/executor.js
+* Project: Now version number is also in package.json
+
 ### Version 0.1.3
 On 29.04.2017
 * Minor fixes, optimization and cleanup

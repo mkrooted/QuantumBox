@@ -1,0 +1,40 @@
+extends layout
+block content
+    <body>
+    <nav class="navbar navbar-default">
+    <div class="container">
+    <div class="navbar-header navbar-right-border">
+    <a href="/" class="navbar-brand">QuantumBox HUB</a>
+    </div>
+    <div>
+    <ul class="nav navbar-nav">
+    <li class="btn1"><a href="/">Home</a></li>
+    <li class="btn1"><a href="/lan-scan">Scan for new devices</a></li>
+    <li class="btn1"><a href="/manager">Entanglement manager</a></li>
+    <li class="btn1"><a href="/libs">Libraries manager</a></li>
+    <li class="btn1"><a href="/interfaces">Interfaces manager</a></li>
+    </ul>
+    </div>
+    </div>
+    </nav>
+    <div class="container">
+    <div class="jumbotron">
+    h2= "You are about to add new device"
+    </div>
+    </div>
+    <div class="container">
+    div.panel.panel-default
+        div.panel-heading= "Details"
+        form.dev-edit(action="/dev-add" method="get" id="device-form")
+            div.form-group
+                label(for="dev-vendor")= "Manufacturer"
+                input.form-control(type="text" id="dev-vendor" name="vendor" )
+            div.form-group
+                label(for="dev-mac")= "Physical Address"
+                input.form-control(type="text" id="dev-mac" name="mac" )
+            div.form-group
+                label(for="dev-addr")= "Network Address"
+                input.form-control(type="text" id="dev-addr" name="addr" )
+            div.form-group
+                input.form-control(type="submit" value="Add device")
+    </div>
