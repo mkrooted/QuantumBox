@@ -16,7 +16,7 @@ On 29.04.2017
 
 ### Version 0.1.2
 On 24.04.2017
-* Major: New Library for Xiaomi Yeelight Bulb
+* QuantumBox proudly presents new Library for "Xiaomi Yeelight White Bulb"
     * powered_on
     * light_on
     * light_off
@@ -30,7 +30,7 @@ On 24.04.2017
 
 ### Version 0.1.1 
 On 18.04.2017
-* Major: Renamed all IP into Address. Now any suitable address should be stored in db, not only ip
+* Change: Renamed all IP into Address. Now any suitable address should be stored in db, not only ip
 * Add: "Delete device"
 * Add: "Edit device"
 * Fix: Typo in deleteDeviceById()
